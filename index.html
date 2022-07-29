@@ -77,7 +77,7 @@
 
 // parse the date / time
 // var parseTime = d3.timeParse("%d-%b-%y");
-var parseTime = d3.timeParse("%y-%m-%d");
+var parseTime = d3.timeParse("%Y-%m-%d");
 
 // set the ranges
 var x = d3.scaleTime().range([0, width]);
@@ -100,6 +100,7 @@ var valueline2 = d3.line()
   // format the data
   data.forEach(function(d) {
       d.date = parseTime(d.date);
+      console.log(d.date);
       console.log(data);
       // d.close = +d.close;
       // d.open = +d.open;
@@ -108,7 +109,7 @@ var valueline2 = d3.line()
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) {
-	  return Math.max(d.close, d.Bank_of_Thailand); })]);
+	  return 20; })]);
 
   // Add the valueline path.
   svg.append("path")
