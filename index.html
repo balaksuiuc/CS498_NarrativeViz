@@ -76,7 +76,8 @@
         // var parseTime = d3.timeParse("%m/%d/%Y");
 
 // parse the date / time
-var parseTime = d3.timeParse("%d-%b-%y");
+// var parseTime = d3.timeParse("%d-%b-%y");
+var parseTime = d3.timeParse("%m/%d/%y");
 
 // set the ranges
 var x = d3.scaleTime().range([0, width]);
@@ -85,20 +86,21 @@ var y = d3.scaleLinear().range([height, 0]);
 // define the 1st line
 var valueline = d3.line()
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+    .y(function(d) { return y(d.US_Federal_Reserve_System); });
 
 // define the 2nd line
 var valueline2 = d3.line()
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.open); });
+    .y(function(d) { return y(d.Bank_of_Thailand); });
 
 
 // Get the data
-d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/data2.csv").then(function(data) {
-
+// d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/data2.csv").then(function(data) {
+  d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/CB_data.dat").then(function(data) {
   // format the data
   data.forEach(function(d) {
       d.date = parseTime(d.date);
+      console.log(data);
       // d.close = +d.close;
       // d.open = +d.open;
   });
@@ -106,7 +108,7 @@ d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/d
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) {
-	  return Math.max(d.close, d.open); })]);
+	  return Math.max(d.close, d.Bank_of_Thailand); })]);
 
   // Add the valueline path.
   svg.append("path")
