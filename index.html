@@ -92,7 +92,12 @@ var valueline = d3.line()
 var valueline2 = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.Bank_of_Thailand); });
-
+    
+    // define the 2nd line
+var valueline3 = d3.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.Reserve_Bank_of_India); });
+    
 
 // Get the data
 // d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/data2.csv").then(function(data) {
@@ -123,6 +128,13 @@ var valueline2 = d3.line()
       .attr("class", "line")
       .style("stroke", "red")
       .attr("d", valueline2);
+
+  // Add the valueline3 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "red")
+      .attr("d", valueline3);
 
   // Add the X Axis
   svg.append("g")
