@@ -83,6 +83,53 @@
             .x(function(d) { return x(d.Date); })
             .y(function(d) { return y(d.Central_Bank_of_Argentina); });
             
+            var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/data2.csv").then(function(data) {
+
+  // format the data
+  data.forEach(function(d) {
+      d.date = parseTime(d.date);
+      d.close = +d.close;
+      d.open = +d.open;
+  });
+
+  // Scale the range of the data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) {
+	  return Math.max(d.close, d.open); })]);
+
+  // Add the valueline path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", valueline);
+
+  // Add the valueline2 path.
+  svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .style("stroke", "red")
+      .attr("d", valueline2);
+
+  // Add the X Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // Add the Y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+});
+
+/*
         d3.csv(dataPath)
           .then(function(data) {
               // data is now whole data set
@@ -108,6 +155,7 @@
           .catch(function(error){
             // handle error   
           })
+          */
 
     </script>
 </div>
