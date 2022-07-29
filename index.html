@@ -19,6 +19,12 @@
     stroke: steelblue;
     stroke-width: 2px;
   }
+
+  .legend {
+    font-size: 16px;
+    font-weight: bold;
+    text-anchor: middle;
+}
   
   </style>
 <body>
@@ -56,7 +62,7 @@
       <div id="vis-canvas"></div>
     </div>
   <script src="js/stepper.js"></script>
-
+  
   <script>
 
         // Set the dimensions of the canvas / graph
@@ -75,106 +81,128 @@
         var dataPath = "https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/CB_data.dat";
         // var parseTime = d3.timeParse("%m/%d/%Y");
 
-// parse the date / time
-// var parseTime = d3.timeParse("%d-%b-%y");
-var parseTime = d3.timeParse("%Y-%m-%d");
+        // parse the date / time
+        // var parseTime = d3.timeParse("%d-%b-%y");
+        var parseTime = d3.timeParse("%Y-%m-%d");
 
-// set the ranges
-var x = d3.scaleTime().range([0, width]);
-var y = d3.scaleLinear().range([height, 0]);
+        // set the ranges
+        var x = d3.scaleTime().range([0, width]);
+        var y = d3.scaleLinear().range([height, 0]);
 
-// define the 1st line
-var valueline = d3.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.US_Federal_Reserve_System); });
+        /* =============================== */
+        ['date',
+        'US_Federal_Reserve_System',
+        'European_Central_Bank',
+        'Bank_of_Japan',
+        'Bank_of_England',
+        'Reserve_Bank_of_Australia',
 
-// define the 2nd line
-var valueline2 = d3.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.Bank_of_Thailand); });
-    
-    // define the 2nd line
-var valueline3 = d3.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.Reserve_Bank_of_India); });
-    
+ 
+        'Reserve_Bank_of_India',
+        'Bank_of_Thailand',
+        'Central_Bank_of_Brazil',
+        "People's_Bank_of_China",
+        'Bank_Indonesia',]
 
-// Get the data
-// d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/data2.csv").then(function(data) {
-  d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/CB_data.dat").then(function(data) {
-  // format the data
-  data.forEach(function(d) {
-      d.date = parseTime(d.date);
-      console.log(d.date);
-      console.log(data);
-      // d.close = +d.close;
-      // d.open = +d.open;
-  });
+        // define the 1 line
+        var valueline1 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.US_Federal_Reserve_System); });
 
-  // Scale the range of the data
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain([0, d3.max(data, function(d) {
-	  return 20; })]);
+        // define the 2 line
+        var valueline2 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.European_Central_Bank); });
+            
+        // define the 3 line
+        var valueline3 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.Bank_of_Japan); });
 
-  // Add the valueline path.
-  svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", valueline);
+        // define the 4 line
+        var valueline4 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.Bank_of_England); });
 
-  // Add the valueline2 path.
-  svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .style("stroke", "red")
-      .attr("d", valueline2);
+        // define the 5 line
+        var valueline5 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.Reserve_Bank_of_Australia); });
+            
+        // define the 6 line
+        var valueline1 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.US_Federal_Reserve_System); });
 
-  // Add the valueline3 path.
-  svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .style("stroke", "red")
-      .attr("d", valueline3);
+        // define the 7 line
+        var valueline2 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.European_Central_Bank); });
+            
+        // define the 8 line
+        var valueline3 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.Bank_of_Japan); });
 
-  // Add the X Axis
-  svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+        // define the 9 line
+        var valueline4 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.Bank_of_England); });
 
-  // Add the Y Axis
-  svg.append("g")
-      .call(d3.axisLeft(y));
+        // define the 10 line
+        var valueline5 = d3.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return y(d.Reserve_Bank_of_Australia); });        
 
-});
 
-/*
-        d3.csv(dataPath)
-          .then(function(data) {
-              // data is now whole data set
-              // draw chart in here!
-              console.log(data[0]);
-              console.log(data[1]);
-              console.log(data[2]);
-              svg.append("path")
+        /* =============================== */
+
+        // Get the data
+        // d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/data2.csv").then(function(data) {
+          d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/CB_data.dat").then(function(data) {
+            console.log(data[2]);
+            // console.log(data.Reserve_Bank_of_India);
+          // format the data
+          data.forEach(function(d) {
+              d.date = parseTime(d.date);
+          });
+
+          // Scale the range of the data
+          x.domain(d3.extent(data, function(d) { return d.date; }));
+          y.domain([0, d3.max(data, function(d) {
+            return 12; })]);
+
+          // Add the valueline path.
+          svg.append("path")
               .data([data])
               .attr("class", "line")
-              .attr("d", line_ARG);
-      
-              // Add the X Axis
-              svg.append("g")
-                  .attr("transform", "translate(0," + height + ")")
-                  .call(d3.axisBottom(x));
+              .attr("d", valueline1);
 
-              // Add the Y Axis
-              svg.append("g")
-                  .call(d3.axisLeft(y));
-                  
-          })
-          .catch(function(error){
-            // handle error   
-          })
-          */
+          // Add the valueline2 path.
+          svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .style("stroke", "red")
+              .attr("d", valueline2);
 
-    </script>
-</div>
+          // Add the valueline3 path.
+          svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .style("stroke", "green")
+              .attr("d", valueline3);
+
+          // Add the X Axis
+          svg.append("g")
+              .attr("transform", "translate(0," + height + ")")
+              .call(d3.axisBottom(x));
+
+          // Add the Y Axis
+          svg.append("g")
+              .call(d3.axisLeft(y));
+
+        });
+
+  </script>
+  </div>
 </body>
