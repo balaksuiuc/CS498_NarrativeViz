@@ -18,3 +18,4 @@ Click here to see the visualization. The martini glass structure is used here.
 
 ### Triggers
 
+#### Acknowledgments
