@@ -35,27 +35,27 @@
         The tabs allow the user to switch between global bank rates and developed/emerging market rate changes.</p>
     <div id="vis-nav">
       <a href="#" id="step1" class="step-link active">Global CB rate levels</a>
-      <a href="#" id="step2" class="step-link">Emerging markets</a>
-      <a href="#" id="step3" class="step-link">Developed markets</a>
+      <a href="#" id="step2" class="step-link">Developed markets</a>
+      <a href="#" id="step3" class="step-link">Emerging markets</a>
     </div>
     <div id="vis-container">
       <div id="annotation-steps">
         <div class="annotation-step" id="step1-annotation" style="display:block;">
           <div class="annotation" id="step1-left-annotation" >
-            <h4>Global central banks are very active</h4>
-            <p>...albeit on a  <strong>longer</strong> timescale than people perceive</p>
+            <h4>Global central banks are very active!!</h4>
+            <p>...albeit on a scale that is  <strong>much longer</strong> than people easily perceive</p>
           </div>
         </div>
         <div class="annotation-step" id="step2-annotation">
           <div class="annotation" id="step3-high-annotation" >
-             <h4>Developed markets are highly correlated to one another</h4>
-             <p>Most CBs follow the US central bank's lead...</p>
+             <h4>Developed markets are less volatile and highly correlated to one another</h4>
+             <p>Most CBs follow the US central bank's lead...but not always! <br><br> Click on next step.</p>
           </div>
         </div>
         <div class="annotation-step" id="step3-annotation">
           <div class="annotation" id="step3-high-annotation" >
-            <h4>Emerging markets lag developed markets</h4>
-            <p>Following visualization clearly shows...</p>
+            <h4>Emerging markets recovered much faster than DM</h4>
+            <p>After 2008, India and other markets raised their rates a lot faster than the Fed.</p>
           </div>
         </div>
       </div>
@@ -90,19 +90,6 @@
         var y = d3.scaleLinear().range([height, 0]);
 
         /* =============================== */
-        ['date',
-        'US_Federal_Reserve_System',
-        'European_Central_Bank',
-        'Bank_of_Japan',
-        'Bank_of_England',
-        'Reserve_Bank_of_Australia',
-
- 
-        'Reserve_Bank_of_India',
-        'Bank_of_Thailand',
-        'Central_Bank_of_Brazil',
-        "People's_Bank_of_China",
-        'Bank_Indonesia',]
 
         // define the 1 line
         var valueline1 = d3.line()
@@ -118,7 +105,7 @@
         var valueline3 = d3.line()
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.Bank_of_Japan); });
-
+            
         // define the 4 line
         var valueline4 = d3.line()
             .x(function(d) { return x(d.date); })
@@ -128,40 +115,38 @@
         var valueline5 = d3.line()
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.Reserve_Bank_of_Australia); });
-            
+
         // define the 6 line
-        var valueline1 = d3.line()
+        var valueline6 = d3.line()
             .x(function(d) { return x(d.date); })
-            .y(function(d) { return y(d.US_Federal_Reserve_System); });
+            .y(function(d) { return y(d.Reserve_Bank_of_India); });
 
         // define the 7 line
-        var valueline2 = d3.line()
+        var valueline7 = d3.line()
             .x(function(d) { return x(d.date); })
-            .y(function(d) { return y(d.European_Central_Bank); });
+            .y(function(d) { return y(d.Peoples_Bank_of_China); });
             
         // define the 8 line
-        var valueline3 = d3.line()
+        var valueline8 = d3.line()
             .x(function(d) { return x(d.date); })
-            .y(function(d) { return y(d.Bank_of_Japan); });
+            .y(function(d) { return y(d.Central_Bank_of_Brazil); });
 
         // define the 9 line
-        var valueline4 = d3.line()
+        var valueline9 = d3.line()
             .x(function(d) { return x(d.date); })
-            .y(function(d) { return y(d.Bank_of_England); });
+            .y(function(d) { return y(d.Bank_of_Thailand); });
 
         // define the 10 line
-        var valueline5 = d3.line()
+        var valueline10 = d3.line()
             .x(function(d) { return x(d.date); })
-            .y(function(d) { return y(d.Reserve_Bank_of_Australia); });        
-
+            .y(function(d) { return y(d.Bank_Indonesia); });        
 
         /* =============================== */
 
         // Get the data
         // d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/data2.csv").then(function(data) {
           d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/CB_data.dat").then(function(data) {
-            console.log(data[2]);
-            // console.log(data.Reserve_Bank_of_India);
+          // console.log(data.Reserve_Bank_of_India);
           // format the data
           data.forEach(function(d) {
               d.date = parseTime(d.date);
@@ -170,27 +155,92 @@
           // Scale the range of the data
           x.domain(d3.extent(data, function(d) { return d.date; }));
           y.domain([0, d3.max(data, function(d) {
-            return 12; })]);
+            return 18; })]);
+
+          var plotcolors = ["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"];
+          var names = ["US Fed", "EU CB", "Japan", "England", "Aus", "India", "China", "Brazil", "Thailand", "Indonesia"];
+
+          var legendSpace = 30;
+
+          for (i=0;i <=9; i++){
+          svg.append("text")
+            .attr("y", 100+(legendSpace/2)+i*legendSpace)  // space legend
+            .attr("x", width - (margin.left/2))
+            .attr("class", "legend")    // style the legend
+            .style("fill", plotcolors[i])
+            .text(names[i]);
+          }
+
 
           // Add the valueline path.
           svg.append("path")
               .data([data])
               .attr("class", "line")
+              .style("stroke", plotcolors[0])
               .attr("d", valueline1);
 
           // Add the valueline2 path.
           svg.append("path")
               .data([data])
               .attr("class", "line")
-              .style("stroke", "red")
+              .style("stroke", plotcolors[1])
               .attr("d", valueline2);
 
           // Add the valueline3 path.
           svg.append("path")
               .data([data])
               .attr("class", "line")
-              .style("stroke", "green")
-              .attr("d", valueline3);
+              .style("stroke",  plotcolors[2])
+              .attr("d",valueline3);
+
+          // Add the valueline4 path.
+          svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .style("stroke",  plotcolors[3])
+              .attr("d",valueline4);
+
+          // Add the valueline3 path.
+          svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .style("stroke",  plotcolors[4])
+              .attr("d",valueline4);
+
+          // Add the valueline3 path.
+          svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .style("stroke",  plotcolors[5])
+              .attr("d",valueline5);              
+
+          // Add the valueline3 path.
+          svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .style("stroke",  plotcolors[6])
+              .attr("d",valueline6);
+
+          // Add the valueline3 path.
+          svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .style("stroke",  plotcolors[7])
+              .attr("d",valueline7);              
+
+          // Add the valueline3 path.
+          svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .style("stroke",  plotcolors[8])
+              .attr("d",valueline8);              
+
+          // Add the valueline3 path.
+          svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .style("stroke",  plotcolors[9])
+              .attr("d",valueline9);              
 
           // Add the X Axis
           svg.append("g")
