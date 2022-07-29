@@ -4,17 +4,17 @@ By Balakumar Balasubramaniam, CS 498
 
 Click here to see the visualization. The martini glass structure is used here. 
 
-# Message
+### Message
 
-# Narrative structure
+### Narrative structure
 
-# Visual structure
+### Visual structure
 
-# Scenes
+### Scenes
 
-# Annotations
+### Annotations
 
-# Parameters
+### Parameters
 
-# Triggers
+### Triggers
 
