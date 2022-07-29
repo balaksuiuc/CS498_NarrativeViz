@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/stepper.css">
 
-  <script src="js/d3.v2.min.js"></script>
-  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/d3.v5.js"></script>
 
 </head>
 <body>
@@ -56,21 +56,17 @@
             height = 700 - margin.top - margin.bottom;
     
         // Set the ranges
-        var x = d3.scale.linear()
+        var x = d3.scaleLinear()
             .range([0, width]);
-        var y = d3.scale.linear()
+        var y = d3.scaleLinear()
             .range([height, 0]);
     
-        var color = d3.scale.category10();
-    
+        var color = d3.scaleOrdinal(d3.schemeCategory10);
+
         // Define the axes
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
+        var xAxis = d3.axisBottom(x);
     
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
+        var yAxis = d3.axisLeft(y);
     
         // Add the svg canvas
         var svg = d3.select("#vis-canvas").append("svg")
@@ -79,93 +75,38 @@
           .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
-        // Get the data
-        //https://raw.githubusercontent.com/tylerwatkins101/cs498-visualization-project/master/data/epa2015_final.csv
-        //https://balaksuiuc.github.io/data/CB_data.dat
-        d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/CB_data.dat", function(error, data) {
-          if (error) throw error;
-    
-          data.forEach(function(d) {
-            console.log(d)
-          });
-    
-        // Scale the range of the data
-          x.domain(d3.extent(data, function(d) { return d.horse; })).nice();
-          y.domain(d3.extent(data, function(d) { return d.CO2; })).nice();
-    
-        // Add the X Axis
-          svg.append("g")
-              .attr("class", "x axis")
-              .attr("transform", "translate(0," + height + ")")
-              .call(xAxis)
-            .append("text")
-              .attr("class", "label")
-              .attr("x", width)
-              .attr("y", -6)
-              .style("text-anchor", "end")
-              .text("Rated Horsepower (foot-pounds per second)");
-    
-        // Add the Y Axis
-          svg.append("g")
-              .attr("class", "y axis")
-              .call(yAxis)
-            .append("text")
-              .attr("class", "label")
-              .attr("transform", "rotate(-90)")
-              .attr("x", -200)
-              .attr("y", 6)
-              .attr("dy", ".71em")
-              .style("text-anchor", "end")
-              .text("CO2 Emissions (grams per mile)")
-    
-        // Add the Scatterplot
-          svg.selectAll(".dot")
-              .data(data)
-            .enter().append("circle")
-              .attr("class", "dot")
-              .attr("r", 3.5)
-              .attr("cx", function(d) { return x(d.horse); })
-              .attr("cy", function(d) { return y(d.CO2); })
-              .style("fill", function(d) { return color(d.type); })
-              .on("mouseover", function(d){
-                  d3.selectAll('.dot')
-                       .filter(function(dot){ 
-                        return (dot.type != d.type) 
-                       })
-                       .transition()
-                       .style("opacity", 0.01)
-              })
-                  .on("mouseout", function(d){
-                   d3.selectAll('.dot')
-                    .filter(function(dot){ 
-                     return (dot.type != d.type) 
-                    })
-                    .transition()
-                    .style("opacity", 1)
-              });
-    
-        // Add the Legend
-          var legend = svg.selectAll(".legend")
-              .data(color.domain())
-            .enter().append("g")
-              .attr("class", "legend")
-              .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-    
-          legend.append("rect")
-              .attr("x", width - 18)
-              .attr("width", 18)
-              .attr("height", 18)
-              .style("fill", color);
-    
-          legend.append("text")
-              .attr("x", width - 24)
-              .attr("y", 9)
-              .attr("dy", ".35em")
-              .style("text-anchor", "end")
-              .text(function(d) { return d; });
-    
-        });
-    
-        </script>
+        // Get data
+        var dataPath = "https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/CB_data.dat";
+        var parseTime = d3.timeParse("%m/%d/%Y");
+
+        var line_ARG = d3.line()
+            .x(function(d) { return x(d.Date); })
+            .y(function(d) { return y(d.Central_Bank_of_Argentina); });
+            
+        d3.csv(dataPath)
+          .then(function(data) {
+              // data is now whole data set
+              // draw chart in here!
+              console.log(data[0]);
+              svg.append("path")
+              .data([data])
+              .attr("class", "line")
+              .attr("d", line_ARG);
+      
+              // Add the X Axis
+              svg.append("g")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(d3.axisBottom(x));
+
+              // Add the Y Axis
+              svg.append("g")
+                  .call(d3.axisLeft(y));
+                  
+          })
+          .catch(function(error){
+            // handle error   
+          })
+
+    </script>
 </div>
 </body>
