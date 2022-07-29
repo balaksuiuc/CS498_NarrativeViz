@@ -80,7 +80,9 @@
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
         // Get the data
-        d3.csv("data/CB_rates.dat", function(error, data) {
+        //https://raw.githubusercontent.com/tylerwatkins101/cs498-visualization-project/master/data/epa2015_final.csv
+        //https://balaksuiuc.github.io/data/CB_data.dat
+        d3.csv("https://raw.githubusercontent.com/balaksuiuc/cs498_NarrativeViz/master/data/CB_data.dat", function(error, data) {
           if (error) throw error;
     
           data.forEach(function(d) {
